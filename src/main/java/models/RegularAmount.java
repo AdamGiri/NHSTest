@@ -1,7 +1,9 @@
 package models;
 
+import annotations.ValidRegularAmount;
 import enums.Frequency;
 
+@ValidRegularAmount
 public class RegularAmount {
 
 	private Frequency frequency;
