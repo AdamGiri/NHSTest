@@ -13,6 +13,11 @@ public class RegularAmount {
 	//TODO create validator to format "##.#"
 	@NotNull
 	private String amount;
+	
+	public RegularAmount(Frequency frequency, String amount) {
+		this.frequency = frequency;
+		this.amount = amount;
+	}
 
 	public Frequency getFrequency() {
 		return frequency;
