@@ -10,7 +10,8 @@ public class RegularAmount {
 
 	@NotNull
 	private Frequency frequency;
-	//TODO create validator to format "##.#"
+	//TODO create validator that returns false if you can't parse amount string to a double (i.e. returns number format exception)
+	//include NotNull inside it
 	@NotNull
 	private String amount;
 	

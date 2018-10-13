@@ -9,7 +9,7 @@ import models.RegularAmount;
 
 public class RegularAmountValidator implements ConstraintValidator<ValidRegularAmount, RegularAmount>{
 
-	
+	//TODO clean calculations up into separate classes/methods
 	//NB I am assuming a quarter is 13 weeks
 	public boolean isValid(RegularAmount value, ConstraintValidatorContext context)
 	{
@@ -21,7 +21,7 @@ public class RegularAmountValidator implements ConstraintValidator<ValidRegularA
 		double totalAmount = Double.parseDouble(value.getAmount());
 		
 		//multiply amount by 100 to pence
-		
+		//TODO perhaps create ICalculator interface that declares calculate() for this:
 		double totalAmountPence = totalAmount * 100 / new FrequencyToWeekCalculator(value.getFrequency()).calculate();
 		
 		//valid if %= 0
