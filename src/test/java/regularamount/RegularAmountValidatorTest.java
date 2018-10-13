@@ -28,7 +28,7 @@ public class RegularAmountValidatorTest {
 	}
 	
 	@Test
-	public void oneWeekFrequencyWithWholePenceNumberAmountShouldReturnNoViolations()
+	public void oneWeekFrequency_WithWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnNoViolations()
 	{
 		RegularAmount regularAmount = new RegularAmount(Frequency.WEEK, "10.0");
 		Set<ConstraintViolation<RegularAmount>> violations = validator.validate(regularAmount);
@@ -36,7 +36,7 @@ public class RegularAmountValidatorTest {
 	}
 	
 	@Test
-	public void oneWeekFrequencyWithNonWholePenceNumberAmountShouldReturnAViolationMessage()
+	public void oneWeekFrequency_WithNonWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnAViolationMessage()
 	{
 		RegularAmount regularAmount = new RegularAmount(Frequency.WEEK, "10.152");
 		Set<ConstraintViolation<RegularAmount>> violations = validator.validate(regularAmount);
@@ -44,7 +44,7 @@ public class RegularAmountValidatorTest {
 	}
 	
 	@Test
-	public void twoWeekFrequencyWithWholePenceNumberAmountShouldReturnNoViolations()
+	public void twoWeekFrequency_WithWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnNoViolations()
 	{
 		RegularAmount regularAmount = new RegularAmount(Frequency.TWO_WEEK, "50.0");
 		Set<ConstraintViolation<RegularAmount>> violations = validator.validate(regularAmount);
@@ -52,13 +52,68 @@ public class RegularAmountValidatorTest {
 	}
 	
 	@Test
-	public void twoWeekFrequencyWithNonWholePenceNumberAmountShouldReturnAViolationMessage()
+	public void twoWeekFrequency_WithNonWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnAViolationMessage()
 	{
-		RegularAmount regularAmount = new RegularAmount(Frequency.TWO_WEEK, "50.389");
+		RegularAmount regularAmount = new RegularAmount(Frequency.TWO_WEEK, "50.364");
 		Set<ConstraintViolation<RegularAmount>> violations = validator.validate(regularAmount);
 		assertEquals(violationMessage, violations.iterator().next().getMessage());
 	}
 	
+	@Test
+	public void fourWeekFrequency_WithWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnNoViolations()
+	{
+		RegularAmount regularAmount = new RegularAmount(Frequency.FOUR_WEEK, "40");
+		Set<ConstraintViolation<RegularAmount>> violations = validator.validate(regularAmount);
+		assertEquals(0, violations.size());
+	}
+	
+	@Test
+	public void fourWeekFrequency_WithNonWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnAViolationMessage()
+	{
+		RegularAmount regularAmount = new RegularAmount(Frequency.FOUR_WEEK, "30.7");
+		Set<ConstraintViolation<RegularAmount>> violations = validator.validate(regularAmount);
+		assertEquals(violationMessage, violations.iterator().next().getMessage());
+	}
+	
+	@Test
+	public void monthFrequency_ShouldReturnAViolationMessage()
+	{
+		RegularAmount regularAmount = new RegularAmount(Frequency.MONTH, "40");
+		Set<ConstraintViolation<RegularAmount>> violations = validator.validate(regularAmount);
+		assertEquals(violationMessage,  violations.iterator().next().getMessage());
+	}
+	
+	@Test
+	public void quarterFrequency_WithWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnNoViolations()
+	{
+		RegularAmount regularAmount = new RegularAmount(Frequency.QUARTER, "143");
+		Set<ConstraintViolation<RegularAmount>> violations = validator.validate(regularAmount);
+		assertEquals(0, violations.size());
+	}
+	
+	@Test
+	public void quarterFrequency_WithNonWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnAViolationMessage()
+	{
+		RegularAmount regularAmount = new RegularAmount(Frequency.QUARTER, "145.67");
+		Set<ConstraintViolation<RegularAmount>> violations = validator.validate(regularAmount);
+		assertEquals(violationMessage, violations.iterator().next().getMessage());
+	}
+	
+	@Test
+	public void yearFrequency_WithWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnNoViolations()
+	{
+		RegularAmount regularAmount = new RegularAmount(Frequency.YEAR, "390");
+		Set<ConstraintViolation<RegularAmount>> violations = validator.validate(regularAmount);
+		assertEquals(0, violations.size());
+	}
+	
+	@Test
+	public void yearFrequency_WithNonWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnAViolationMessage()
+	{
+		RegularAmount regularAmount = new RegularAmount(Frequency.YEAR, "370");
+		Set<ConstraintViolation<RegularAmount>> violations = validator.validate(regularAmount);
+		assertEquals(violationMessage, violations.iterator().next().getMessage());
+	}
 	
 	
 }
