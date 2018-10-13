@@ -1,12 +1,17 @@
 package models;
 
+import javax.validation.constraints.NotNull;
+
 import annotations.ValidRegularAmount;
 import enums.Frequency;
 
 @ValidRegularAmount
 public class RegularAmount {
 
+	@NotNull
 	private Frequency frequency;
+	//TODO create validator to format "##.#"
+	@NotNull
 	private String amount;
 
 	public Frequency getFrequency() {
