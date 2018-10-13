@@ -30,7 +30,7 @@ public class RegularAmountValidatorTest {
 	@Test
 	public void oneWeekFrequencyWithWholePenceNumberAmountShouldReturnNoViolations()
 	{
-		RegularAmount regularAmount = new RegularAmount(Frequency.WEEK, "10");
+		RegularAmount regularAmount = new RegularAmount(Frequency.WEEK, "10.0");
 		Set<ConstraintViolation<RegularAmount>> violations = validator.validate(regularAmount);
 		assertEquals(0, violations.size());
 	}
@@ -40,7 +40,25 @@ public class RegularAmountValidatorTest {
 	{
 		RegularAmount regularAmount = new RegularAmount(Frequency.WEEK, "10.152");
 		Set<ConstraintViolation<RegularAmount>> violations = validator.validate(regularAmount);
-		if (violations != null && !violations.isEmpty()) assertEquals(violationMessage, violations.iterator().next().getMessage());
+		assertEquals(violationMessage, violations.iterator().next().getMessage());
 	}
+	
+	@Test
+	public void twoWeekFrequencyWithWholePenceNumberAmountShouldReturnNoViolations()
+	{
+		RegularAmount regularAmount = new RegularAmount(Frequency.TWO_WEEK, "50.0");
+		Set<ConstraintViolation<RegularAmount>> violations = validator.validate(regularAmount);
+		assertEquals(0, violations.size());
+	}
+	
+	@Test
+	public void twoWeekFrequencyWithNonWholePenceNumberAmountShouldReturnAViolationMessage()
+	{
+		RegularAmount regularAmount = new RegularAmount(Frequency.TWO_WEEK, "50.389");
+		Set<ConstraintViolation<RegularAmount>> violations = validator.validate(regularAmount);
+		assertEquals(violationMessage, violations.iterator().next().getMessage());
+	}
+	
+	
 	
 }

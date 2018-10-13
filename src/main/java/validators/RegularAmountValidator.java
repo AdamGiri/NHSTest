@@ -14,7 +14,6 @@ public class RegularAmountValidator implements ConstraintValidator<ValidRegularA
 	public boolean isValid(RegularAmount value, ConstraintValidatorContext context)
 	{
 		//invalidate if frequency == month i.e. not a multiple of a week
-		
 		if (value.getFrequency() == Frequency.MONTH) return false;
 		
 		//convert amount to double
@@ -23,7 +22,7 @@ public class RegularAmountValidator implements ConstraintValidator<ValidRegularA
 		
 		//multiply amount by 100 to pence
 		
-		double totalAmountPence = totalAmount * 100;
+		double totalAmountPence = totalAmount * 100 / new FrequencyToWeekCalculator(value.getFrequency()).calculate();
 		
 		//valid if %= 0
 		
