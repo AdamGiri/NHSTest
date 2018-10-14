@@ -19,19 +19,35 @@ public class RegularAmountValidator implements ConstraintValidator<ValidRegularA
 	public boolean isValid(RegularAmount value, ConstraintValidatorContext context)
 	{
 		//invalidate if frequency == month i.e. not a multiple of a week
-		if (value.getFrequency() == Frequency.MONTH)
+		if (isFrequencyMonth(value.getFrequency())) return false;
+		
+		//calculate if amount is a multiple of whole pence after dividing to weekly value
+		if (isAmountAMultipleOfWholePence(generateAmountToWeeklyPenceCalculator(value))) return true;
+		
+		return false;
+	}
+	
+	private boolean isFrequencyMonth(Frequency frequency)
+	{
+		if (frequency == Frequency.MONTH)
 		{
 			logger.info("Frequency is one month, therefore it is invalid as monthly incomes will not divide to a whole weekly value. ");
-			return false;
+			return true;
 		}
 		
+		return false;
+	}
+	
+	private AmountToWeeklyPenceCalculator generateAmountToWeeklyPenceCalculator(RegularAmount value)
+	{
 		logger.debug("Converting the amount to a weekly pence amount in double format.");
-		AmountToWeeklyPenceCalculator amountToWeeklyPenceCalculator = new AmountToWeeklyPenceCalculator(new FrequencyToWeekCalculator(value.getFrequency()), value.getAmount());
-		
+		return new AmountToWeeklyPenceCalculator(new FrequencyToWeekCalculator(value.getFrequency()), value.getAmount());
+	}
+	
+	private boolean isAmountAMultipleOfWholePence(AmountToWeeklyPenceCalculator calculator)
+	{
 		//valid if %= 0
-		
-		
-		if (amountToWeeklyPenceCalculator.calculateWeeklyAmountInDoubleFormat() % 1 == 0) {
+		if (calculator.calculateWeeklyAmountInDoubleFormat() % 1 == 0) {
 			logger.info("Amount is a multiple of a whole number of pence when divided to a one week frequency");
 			return true;
 		}
