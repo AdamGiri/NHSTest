@@ -20,7 +20,6 @@ public class RegularAmountValidatorTest {
 	
 	private static Validator validator;
 	private String multipleViolationMessage = "Amount must be a multiple of a whole number of pence when divided to a one week  frequency.";
-	private String amountFormatViolationMessage = "Amount must be in a correct format to be converted to a double.";
 	
 	@Before
 	public void setUp()
@@ -108,21 +107,7 @@ public class RegularAmountValidatorTest {
 		assertEquals(multipleViolationMessage, getViolations(regularAmount).iterator().next().getMessage());
 	}
 	
-	/*** Test below  to see if when the amount is in an invalid number format a ValidationException is thrown ***/
 	
-	@Test(expected = ValidationException.class)
-	public void invalidStringAmount_ShouldThrowAValidationException()
-	{
-		RegularAmount regularAmount = new RegularAmount(Frequency.WEEK, "10!*^£");
-		getViolations(regularAmount);
-	}
-	
-	@Test(expected = ValidationException.class)
-	public void invalidStringAmountWithMoreThanOneDecimalPoint_ShouldThrowAValidationException()
-	{
-		RegularAmount regularAmount = new RegularAmount(Frequency.WEEK, "10.0.0");
-		getViolations(regularAmount);
-	}
 	
 	
 	private Set<ConstraintViolation<RegularAmount>> getViolations(RegularAmount regularAmount)

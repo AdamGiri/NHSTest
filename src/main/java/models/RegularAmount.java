@@ -12,6 +12,7 @@ public class RegularAmount {
 	@NotNull
 	private Frequency frequency;
 	
+	@NotNull
 	private String amount;
 	
 	public RegularAmount(Frequency frequency, String amount) {
