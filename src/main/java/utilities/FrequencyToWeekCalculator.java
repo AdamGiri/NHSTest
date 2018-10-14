@@ -1,8 +1,8 @@
-package validators;
+package utilities;
 
 import enums.Frequency;
 
-public class FrequencyToWeekCalculator {
+public class FrequencyToWeekCalculator implements ICalculator<Integer> {
 	
 	private Frequency frequency;
 
@@ -12,7 +12,7 @@ public class FrequencyToWeekCalculator {
 	}
 	
 	
-	public int calculate()
+	public Integer calculate()
 	{
 		switch (frequency) {
 			case WEEK:

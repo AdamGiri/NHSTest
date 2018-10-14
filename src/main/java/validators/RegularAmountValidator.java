@@ -6,27 +6,23 @@ import javax.validation.ConstraintValidatorContext;
 import annotations.ValidRegularAmount;
 import enums.Frequency;
 import models.RegularAmount;
+import utilities.AmountToWeeklyPenceCalculator;
+import utilities.FrequencyToWeekCalculator;
 
 public class RegularAmountValidator implements ConstraintValidator<ValidRegularAmount, RegularAmount>{
 
-	//TODO clean calculations up into separate classes/methods
+	
 	//NB I am assuming a quarter is 13 weeks
 	public boolean isValid(RegularAmount value, ConstraintValidatorContext context)
 	{
 		//invalidate if frequency == month i.e. not a multiple of a week
 		if (value.getFrequency() == Frequency.MONTH) return false;
 		
-		//convert amount to double
-		
-		double totalAmount = Double.parseDouble(value.getAmount());
-		
-		//multiply amount by 100 to pence
-		//TODO perhaps create ICalculator interface that declares calculate() for this:
-		double totalAmountPence = totalAmount * 100 / new FrequencyToWeekCalculator(value.getFrequency()).calculate();
+		AmountToWeeklyPenceCalculator amountToWeeklyPenceCalculator = new AmountToWeeklyPenceCalculator(new FrequencyToWeekCalculator(value.getFrequency()), value.getAmount());
 		
 		//valid if %= 0
 		
-		if (totalAmountPence % 1 == 0) return true;
+		if (amountToWeeklyPenceCalculator.calculateWeeklyAmountInDoubleFormat() % 1 == 0) return true;
 		
 		return false;
 	}

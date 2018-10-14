@@ -2,7 +2,7 @@ package regularamount;
 
 import enums.Frequency;
 import models.RegularAmount;
-import validators.FrequencyToWeekCalculator;
+import utilities.FrequencyToWeekCalculator;
 
 public class Main {
 
