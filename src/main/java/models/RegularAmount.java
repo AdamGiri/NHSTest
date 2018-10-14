@@ -2,6 +2,7 @@ package models;
 
 import javax.validation.constraints.NotNull;
 
+
 import annotations.ValidRegularAmount;
 import enums.Frequency;
 
@@ -10,9 +11,7 @@ public class RegularAmount {
 
 	@NotNull
 	private Frequency frequency;
-	//TODO create validator that returns false if you can't parse amount string to a double (i.e. returns number format exception)
-	//include NotNull inside it
-	@NotNull
+	
 	private String amount;
 	
 	public RegularAmount(Frequency frequency, String amount) {

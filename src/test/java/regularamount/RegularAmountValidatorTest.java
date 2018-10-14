@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
+import javax.validation.ValidationException;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
@@ -18,7 +19,8 @@ import models.RegularAmount;
 public class RegularAmountValidatorTest {
 	
 	private static Validator validator;
-	private String violationMessage = "Amount must be a multiple of a whole number of pence when divided to a one week  frequency.";
+	private String multipleViolationMessage = "Amount must be a multiple of a whole number of pence when divided to a one week  frequency.";
+	private String amountFormatViolationMessage = "Amount must be in a correct format to be converted to a double.";
 	
 	@Before
 	public void setUp()
@@ -26,6 +28,8 @@ public class RegularAmountValidatorTest {
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
 	}
+	
+	/*** Tests below test to see if the amount is a multiple of a whole number of pence when divided to a one week  frequency ***/
 	
 	@Test
 	public void oneWeekFrequency_WithWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnNoViolations()
@@ -38,7 +42,7 @@ public class RegularAmountValidatorTest {
 	public void oneWeekFrequency_WithNonWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnAViolationMessage()
 	{
 		RegularAmount regularAmount = new RegularAmount(Frequency.WEEK, "10.152");
-		assertEquals(violationMessage, getViolations(regularAmount).iterator().next().getMessage());
+		assertEquals(multipleViolationMessage, getViolations(regularAmount).iterator().next().getMessage());
 	}
 	
 	@Test
@@ -52,7 +56,7 @@ public class RegularAmountValidatorTest {
 	public void twoWeekFrequency_WithNonWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnAViolationMessage()
 	{
 		RegularAmount regularAmount = new RegularAmount(Frequency.TWO_WEEK, "50.364");
-		assertEquals(violationMessage, getViolations(regularAmount).iterator().next().getMessage());
+		assertEquals(multipleViolationMessage, getViolations(regularAmount).iterator().next().getMessage());
 	}
 	
 	@Test
@@ -66,14 +70,14 @@ public class RegularAmountValidatorTest {
 	public void fourWeekFrequency_WithNonWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnAViolationMessage()
 	{
 		RegularAmount regularAmount = new RegularAmount(Frequency.FOUR_WEEK, "30.7");
-		assertEquals(violationMessage, getViolations(regularAmount).iterator().next().getMessage());
+		assertEquals(multipleViolationMessage, getViolations(regularAmount).iterator().next().getMessage());
 	}
 	
 	@Test
 	public void monthFrequency_ShouldReturnAViolationMessage()
 	{
 		RegularAmount regularAmount = new RegularAmount(Frequency.MONTH, "40");
-		assertEquals(violationMessage,  getViolations(regularAmount).iterator().next().getMessage());
+		assertEquals(multipleViolationMessage,  getViolations(regularAmount).iterator().next().getMessage());
 	}
 	
 	@Test
@@ -87,7 +91,7 @@ public class RegularAmountValidatorTest {
 	public void quarterFrequency_WithNonWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnAViolationMessage()
 	{
 		RegularAmount regularAmount = new RegularAmount(Frequency.QUARTER, "145.67");
-		assertEquals(violationMessage, getViolations(regularAmount).iterator().next().getMessage());
+		assertEquals(multipleViolationMessage, getViolations(regularAmount).iterator().next().getMessage());
 	}
 	
 	@Test
@@ -101,8 +105,25 @@ public class RegularAmountValidatorTest {
 	public void yearFrequency_WithNonWholePenceNumberAmount_AfterBeingDividedToOneWeek_ShouldReturnAViolationMessage()
 	{
 		RegularAmount regularAmount = new RegularAmount(Frequency.YEAR, "370");
-		assertEquals(violationMessage, getViolations(regularAmount).iterator().next().getMessage());
+		assertEquals(multipleViolationMessage, getViolations(regularAmount).iterator().next().getMessage());
 	}
+	
+	/*** Test below  to see if when the amount is in an invalid number format a ValidationException is thrown ***/
+	
+	@Test(expected = ValidationException.class)
+	public void invalidStringAmount_ShouldThrowAValidationException()
+	{
+		RegularAmount regularAmount = new RegularAmount(Frequency.WEEK, "10!*^£");
+		getViolations(regularAmount);
+	}
+	
+	@Test(expected = ValidationException.class)
+	public void invalidStringAmountWithMoreThanOneDecimalPoint_ShouldThrowAValidationException()
+	{
+		RegularAmount regularAmount = new RegularAmount(Frequency.WEEK, "10.0.0");
+		getViolations(regularAmount);
+	}
+	
 	
 	private Set<ConstraintViolation<RegularAmount>> getViolations(RegularAmount regularAmount)
 	{
